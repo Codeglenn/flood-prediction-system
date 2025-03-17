@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prediction Result</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: linear-gradient(to right, #2193b0, #6dd5ed);
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .risk-low {
+            background-color: #34d399; /* Green */
+        }
+        .risk-moderate {
+            background-color: #facc15; /* Yellow */
+        }
+        .risk-high {
+            background-color: #f87171; /* Red */
+        }
+        .risk-box {
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 mt-8">
+
+<div class="container mx-auto p-6">
+    <h1 class="text-4xl font-bold text-center text-white mt-8">
+        <i class="fas fa-cloud-sun-rain"></i> Flood Prediction Dashboard
+    </h1>
+
+    <div class="bg-white text-black rounded-lg shadow-lg p-8">
+        {% for result in results %}
+        <div class="text-center mb-10">
+            <h3 class="text-2xl font-semibold">
+                <i class="fas fa-map-marker-alt"></i> City: 
+                <span class="text-blue-600">{{ result.city }}</span>
+            </h3>
+
+            {% if result.prediction == "City not found" %}
+                <p class="text-red-600 text-xl font-bold mt-4">
+                    <i class="fas fa-exclamation-triangle"></i> Error: City not found.
+                </p>
+            {% else %}
+                <div class="mt-6">
+                    <h5 class="text-xl text-gray-600"><i class="fas fa-temperature-high"></i> Weather Info</h5>
+                    <p class="text-lg">{{ result.weather }}</p>
+                </div>
+
+                <div class="mt-6">
+                    <h5 class="text-xl text-gray-600"><i class="fas fa-exclamation-triangle"></i> Flood Risk</h5>
+                    {% if result.prediction == "Low Risk" %}
+                        <h2 class="risk-box risk-low text-2xl"><i class="fas fa-check-circle"></i> Low Risk</h2>
+                    {% elif result.prediction == "Moderate Risk" %}
+                        <h2 class="risk-box risk-moderate text-2xl"><i class="fas fa-exclamation-circle"></i> Moderate Risk</h2>
+                    {% else %}
+                        <h2 class="risk-box risk-high text-2xl"><i class="fas fa-skull-crossbones"></i> High Risk</h2>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <!-- Try Another City Button -->
+        <a href="/" class="mt-0 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
+            <i class="fas fa-arrow-left"></i> Try Another City
+        </a>
+
+        <!-- View Prediction History Button -->
+        <a href="/history" class="mt-4 inline-block px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300">
+            <i class="fas fa-history"></i> View Prediction History
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
